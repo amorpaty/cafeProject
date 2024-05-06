@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>유일무이</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/resources/css/common/common.css" />
+    <!-- scripts -->
+    <script src="js/common/jQuery/jquery-3.7.1.js"></script>
+    <script src="js/login.js"></script>
+</head>
+<body>
+    <div class="center" style="text-align: center; width: 100%; height: 25rem;margin-top: 10rem;">
+        <div class="font" style="height: 100%; display: flex; justify-content: center;">
+            <img src="../resources/images/logo.png" style="width: 13rem; height: 13rem;">
+        </div>
+    </div>
+    <div style="width: 100%; height: 100%;">
+        <div style=" display: grid; justify-items: center;">
+            <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${apiKey}, redirect_uri=${redirectUri}, response_type='code')}">
+                <img class="btn" id="kakaoLoginBtn" src="../resources/images/kakao_login_btn.png">
+            </a>
+            <img class="btn" id="googleLoginBtn" src="../resources/images/google_login_btn.png">
+        </div>
+    </div>
+</body>
+</html>
