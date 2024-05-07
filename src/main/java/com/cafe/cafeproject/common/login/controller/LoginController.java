@@ -46,9 +46,9 @@ public class LoginController {
         String accessToken = loginService.getAccessToken(code);
 
         if(StringUtils.isEmpty(accessToken)){
-            resultUrl = "redirect:index";
+            resultUrl = "redirect:/";
         }else{
-            resultUrl = "redirect:main/main";
+            resultUrl = "redirect:/main";
         }
         mv.setViewName(resultUrl);
         return mv;
