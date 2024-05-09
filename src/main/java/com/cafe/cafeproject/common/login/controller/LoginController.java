@@ -15,8 +15,7 @@ import org.thymeleaf.util.StringUtils;
 @RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private LoginService loginService;
+    private final LoginService loginService;
 
 //    @Value("kakao.apiKey")
 //    private String kakaoApiKey;

@@ -3,6 +3,7 @@ package com.cafe.cafeproject.common.login.service;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class LoginService {
 
+    @Value("${kakao.apiKey}")
+    private String kakaoApiKey;
+
+    @Value("${kakao.redirectUri}")
+    private String redirectUri;
+
     public String getAccessToken(String code){
         String token = null;
         String reqUrl = "https://kauth.kakao.com/oauth/token";
@@ -29,8 +36,8 @@ public class LoginService {
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             params.add("grant_type", "authorization_code");
-            params.add("client_id", "ea5a3b253070cb52c63addbaf2bc2053");
-            params.add("redirect_uri", "http://127.0.0.1:8080/login/kakao-login");
+            params.add("client_id", kakaoApiKey);
+            params.add("redirect_uri", redirectUri);
             params.add("code", code);
 
             //http 바디(params)와 http 헤더(headers)를 가진 엔티티
