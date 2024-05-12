@@ -31,7 +31,7 @@ public class NaverOpenApiTest {
     private static boolean flag = true;
 
     /**
-     * 네이버 지도 지역 API
+     * 네이버 지도 지역 검색 API
      * numeunju
      * @since 2024.05.09
      *
@@ -128,7 +128,6 @@ public class NaverOpenApiTest {
             throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
         }
     }
-
 
     private static String readBody(InputStream body){
         InputStreamReader streamReader = new InputStreamReader(body);

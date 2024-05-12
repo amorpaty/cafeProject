@@ -3,6 +3,7 @@ package com.cafe.cafeproject.common.login.service;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
@@ -13,6 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 
 
 @Service
@@ -41,12 +49,10 @@ public class LoginService {
             params.add("code", code);
 
             //http 바디(params)와 http 헤더(headers)를 가진 엔티티
-            HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
-                    new HttpEntity<>(params, headers);
+            HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
 
             //reqUrl로 Http 요청 , POST 방식
-            ResponseEntity<String> response =
-                    rt.exchange(reqUrl, HttpMethod.POST, kakaoTokenRequest, String.class);
+            ResponseEntity<String> response = rt.exchange(reqUrl, HttpMethod.POST, kakaoTokenRequest, String.class);
 
             String responseBody = response.getBody();
 
@@ -60,5 +66,50 @@ public class LoginService {
         }
 
         return token;
+    }
+
+    public HashMap<String, Object> getUserInfo(String accessToken){
+        HashMap<String, Object> userInfo = new HashMap<>();
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+
+            //    요청에 필요한 Header에 포함될 내용
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) parser.parse(result);
+
+            JSONObject properties = (JSONObject) jsonObject.get("properties");
+            JSONObject kakao_account =(JSONObject) jsonObject.get("kakao_account");
+
+            String nickname = properties.get("nickname").toString();
+            //String email = kakao_account.get("email").toString();
+
+            userInfo.put("nickname", nickname);
+            //userInfo.put("email", email);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch ( ParseException e){
+            e.printStackTrace();
+        }
+
+        return userInfo;
     }
 }
