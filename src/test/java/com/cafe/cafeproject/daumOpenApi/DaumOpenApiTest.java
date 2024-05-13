@@ -12,9 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
@@ -27,16 +31,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Transactional
 @DataJpaTest
+@Rollback(value = false)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class DaumOpenApiTest {
 
     @Value("${kakao.apiKey}")
     private String kakaoApiKey;
 
-    @Autowired(required = false)
-    private DaumOpenApiRepository daumOpenApiRepository;
+    @Autowired
+    DaumOpenApiRepository daumOpenApiRepository;
+
     /**
      * daum 지도 지역 검색 API
      * numeunju
@@ -47,68 +52,71 @@ public class DaumOpenApiTest {
     public void daumOpenApiTest(){
 
         String text = null;
-        String [] regionArr = {"안국 카페", "종로 카페", "동대문 카페", "혜화 카페"};
+        String [] regionArr = {"서초 카페", "강남 카페", "논현 카페", "신사 카페",
+                "양재 카페", "매봉 카페", "안국 카페", "종로 카페", "동대문 카페", "혜화 카페", "인사동 카페", "서울 카페"};
 
         int page = 1;
         boolean flag = true;
 
-
         JSONParser jsonParser = new JSONParser();
+        String isEnd = "true";
 
-        while(flag) {
-            try {
+        for (int i = 0; i < regionArr.length ; i++) {
 
+            while(flag){
                 try {
-                    text = URLEncoder.encode(regionArr[0], "UTF-8");
+                    text = URLEncoder.encode(regionArr[i], "UTF-8");
+
+                    System.out.println("regionArr : "  + i + "page : " + page);
+
+                    String apiURL = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + text + "&category_group_code=CE7&page=" + page;    // JSON 결과
+
+                    System.out.println("apiURL : " + apiURL);
+
+                    String responseBody = get(apiURL);
+
+                    JSONObject jsonObject = (JSONObject) jsonParser.parse(responseBody);
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    System.out.println(jsonObject.toString());
+                    isEnd = ((JSONObject) jsonObject.get("meta")).get("is_end").toString();
+
+                    List<Map<String, String>> documents = (ArrayList<Map<String,String>>) jsonObject.get("documents");
+
+                    //값이 있으면 DB 적재
+                    if (!CollectionUtils.isEmpty(documents)) {
+
+                        List<CafeinfoDto> cafeinfoDtos = new ArrayList<>();
+                        //DB 적재
+                        for (Map<String, String> map : documents) {
+                            CafeinfoDto cafeinfoDto = mapper.convertValue(map, CafeinfoDto.class);
+                            cafeinfoDtos.add(cafeinfoDto);
+                        }
+                        daumOpenApiRepository.saveAll(cafeinfoDtos);
+                    }
+                    // is-end : 현재 페이지가 마지막 페이지인지 여부
+                    // 값이 false면 다음 요청 시 page 값을 증가시켜 다음 페이지 요청 가능
+                    if (isEnd.equalsIgnoreCase("true")) {
+                        page = 1;
+                        flag = false;
+                        continue;
+                    } else {
+                        page++;
+                    }
+                    //REST API
+                    Thread.sleep(1000);
+
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException("검색어 인코딩 실패",e);
                 }
+            }
 
-                String apiURL = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + text + "&category_group_code=CE7&page=" + page;    // JSON 결과
-
-                System.out.println("apiURL : " + apiURL);
-
-                String responseBody = get(apiURL);
-
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(responseBody);
-                ObjectMapper mapper = new ObjectMapper();
-
-                System.out.println(jsonObject.toString());
-                String isEnd = ((JSONObject) jsonObject.get("meta")).get("is_end").toString();
-
-
-                List<Map<String, String>> documents = (ArrayList<Map<String,String>>) jsonObject.get("documents");
-
-
-                //값이 있으면 DB 적재
-                if (!CollectionUtils.isEmpty(documents)) {
-
-                    List<CafeinfoDto> cafeinfoDtos = new ArrayList<>();
-                    //DB 적재
-                    for (Map<String, String> map : documents) {
-                        //daumOpenApiRepository.save(cafeinfoDto);
-                        CafeinfoDto cafeinfoDto = mapper.convertValue(map, CafeinfoDto.class);
-
-                        cafeinfoDtos.add(cafeinfoDto);
-                    }
-
-                    daumOpenApiRepository.saveAllAndFlush(cafeinfoDtos);
-                }
-                // is-end : 현재 페이지가 마지막 페이지인지 여부
-                // 값이 false면 다음 요청 시 page 값을 증가시켜 다음 페이지 요청 가능
-                if (isEnd.equalsIgnoreCase("true")) {
-                    flag = false;
-                } else {
-                    page++;
-                }
-
-                //REST API
-                Thread.sleep(1000);
-
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            if(i != regionArr.length-1 ){
+                flag = true;
             }
         }
     }

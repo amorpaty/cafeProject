@@ -1,14 +1,14 @@
 package com.cafe.cafeproject.common.dto;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.ToString;
+import org.springframework.data.geo.Point;
 
 @Data
 @Entity
-@Transactional
 @Table(name = "t_cafeinfo")
+@ToString(callSuper = true)
 public class CafeinfoDto {
 
     @Id
