@@ -10,13 +10,20 @@
 #### Java : JDK 17
 #### Maven : 22
 #### ORM : JPA
-#### DB : PostgreSQL
 ##### 템플릿 엔진 : thymeleaf
 
+## [DB]
+#### 서버 : CenTos9
+#### DB : cafeproject (PostgreSQL 16)
+#### IP : 192.168.56.103
+#### port : 5432
+#### Id/Pw : cafeproject / cafeproject
+
+
 ## [OPEN API]
-#### 지도 : NAVER MAP
-#### 지역검색 : Naver Search API
-#### 이미지검색 : Naver Search API
+#### 지도 : KAKAO MAP
+#### 지역검색 : KAKAO Search API
+#### 이미지검색 : Daum 이미지 검색 API
 
 #### *  [유일무이 프로젝트.docx](https://github.com/amorpaty/cafeProject/files/15256493/default.docx)
 
