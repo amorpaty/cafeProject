@@ -13,10 +13,7 @@
 ##### 템플릿 엔진 : thymeleaf
 
 ## [DB]
-#### 서버 : CenTos9
-#### DB : cafeproject (PostgreSQL 16)
-#### IP : 192.168.56.103
-#### port : 5432
+#### DB : cafeproject (PostgreSQL 16) 
 #### Id/Pw : cafeproject / cafeproject
 
 
