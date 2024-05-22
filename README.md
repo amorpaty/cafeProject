@@ -13,8 +13,7 @@
 ##### 템플릿 엔진 : thymeleaf
 
 ## [DB]
-#### DB : cafeproject (PostgreSQL 16) 
-#### Id/Pw : cafeproject / cafeproject
+#### DB : cafeproject (PostgreSQL 16)
 
 
 ## [OPEN API]
