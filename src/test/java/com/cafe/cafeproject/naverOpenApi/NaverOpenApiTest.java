@@ -33,6 +33,9 @@ public class NaverOpenApiTest {
     /**
      * 네이버 지도 지역 검색 API
      * numeunju
+     * 
+     * -- 키워드에 대한 데이터를 3개씩 밖에 안가져와서
+     * -- 내가 진행하려는 프로젝트와는 맞지 않는다.
      * @since 2024.05.09
      *
      */

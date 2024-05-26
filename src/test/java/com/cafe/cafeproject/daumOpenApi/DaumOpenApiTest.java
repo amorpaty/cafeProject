@@ -1,10 +1,10 @@
 package com.cafe.cafeproject.daumOpenApi;
 
+import com.cafe.cafeproject.common.dto.BubjdinfoDto;
 import com.cafe.cafeproject.common.dto.CafeinfoDto;
-import com.cafe.cafeproject.repository.DaumOpenApiRepository;
+import com.cafe.cafeproject.common.repository.BubjdCodeRepository;
+import com.cafe.cafeproject.common.repository.DaumOpenApiRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityTransaction;
-import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -12,14 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.*;
@@ -39,8 +33,17 @@ public class DaumOpenApiTest {
     @Value("${kakao.apiKey}")
     private String kakaoApiKey;
 
+    /**
+     *
+     */
     @Autowired
     DaumOpenApiRepository daumOpenApiRepository;
+
+    /**
+     * 법정동 TABLE 조회
+     */
+    @Autowired
+    BubjdCodeRepository bubjdCodeRepository;
 
     /**
      * daum 지도 지역 검색 API
@@ -52,26 +55,23 @@ public class DaumOpenApiTest {
     public void daumOpenApiTest(){
 
         String text = null;
-        String [] regionArr = {"서초 카페", "강남 카페", "논현 카페", "신사 카페",
-                "양재 카페", "매봉 카페", "안국 카페", "종로 카페", "동대문 카페", "혜화 카페", "인사동 카페", "서울 카페"};
 
-/*        String [] regionArr = {"산성역 카페", "문정 카페", "상왕십리 카페", "장지 카페",
-                "석촌 카페", "석촌호수 카페", "잠실 카페", "익선동 카페", "을지로 카페", "뚝섬 카페", "서울대공원 카페", "신흥역 카페"};*/
-
-        /*String [] regionArr = {"올림픽공원 카페", "가회동 카페", "왕십리역 카페", "오리역 카페",
-                "판교 카페", "미아사거리 카페", "성신여대 카페", "가오리역 카페", "수유 카페", "용산 카페", "용인 카페", "광주 카페"};*/
-
+        // 읍면동 데이터 리스트 조회
+        List<BubjdinfoDto> bubjdinfoDtoList = bubjdCodeRepository.findAll();
+        
         int page = 1;
         boolean flag = true;
 
         JSONParser jsonParser = new JSONParser();
         String isEnd = "true";
 
-        for (int i = 0; i < regionArr.length ; i++) {
+        for (int i = 0; i < bubjdinfoDtoList.size() ; i++) {
 
             while(flag){
                 try {
-                    text = URLEncoder.encode(regionArr[i], "UTF-8");
+                    BubjdinfoDto bubjdinfoDto = bubjdinfoDtoList.get(i);
+
+                    text = URLEncoder.encode(bubjdinfoDto.getBubjdName() + " 카페", "UTF-8");
 
                     System.out.println("regionArr : "  + i + "page : " + page);
 
@@ -121,7 +121,7 @@ public class DaumOpenApiTest {
                 }
             }
 
-            if(i != regionArr.length-1 ){
+            if(i != bubjdinfoDtoList.size() - 1 ){
                 flag = true;
             }
         }

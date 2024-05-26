@@ -113,6 +113,19 @@
             <artifactId>selenium-devtools-v124</artifactId>
             <version>4.20.0</version>
         </dependency>
+
+        <!-- poi 이용하여 Excel 읽기 -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
     </dependencies>
 
     <build>

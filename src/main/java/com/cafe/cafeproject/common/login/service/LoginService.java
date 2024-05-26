@@ -90,19 +90,21 @@ public class LoginService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
 
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(result);
 
-            JSONObject properties = (JSONObject) jsonObject.get("properties");
-            JSONObject kakao_account =(JSONObject) jsonObject.get("kakao_account");
+            JSONObject kakao_account = (JSONObject) jsonObject.get("kakao_account");
+            JSONObject profile = (JSONObject) kakao_account.get("profile");
 
-            String nickname = properties.get("nickname").toString();
+            String nickname = profile.get("nickname").toString();
+            String thumbnail_image_url = profile.get("thumbnail_image_url").toString();
+            String email = profile.get("email").toString();
             //String email = kakao_account.get("email").toString();
 
             userInfo.put("nickname", nickname);
-            //userInfo.put("email", email);
+            userInfo.put("thumbnail_image_url", thumbnail_image_url);
+            userInfo.put("email", email);
 
         } catch (IOException e) {
             e.printStackTrace();
