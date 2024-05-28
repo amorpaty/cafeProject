@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>유일무이</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="resources/css/common/common.css" />
+    <link rel="stylesheet" href="resources/css/main.css"/>
+    <!-- scripts-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ffb91c5a6ff0bf7cef8bbea6c72cd221"></script>
+    <!-- services 라이브러리 불러오기 -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ffb91c5a6ff0bf7cef8bbea6c72cd221&libraries=services"></script>
+    <script type="text/javascript" src="resources/js/common/jQuery/jquery-3.7.1.js"></script>
+    <script type="text/javascript" src="resources/js/index.js"></script>
+    <script type="text/javascript" src="resources/js/login/login.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div style="height: 100%;">
+            <img id="logo" src="resources/images/logo.png"/>
+            <div class="headerBtnArea">
+                <div class="loginArea">
+                    <span class="loginBtn">로그인</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="searchMainArea">
+        <div class="searchInputArea">
+            <input type="text" id="searchKeyword" name="keyword">
+                <button type="submit" class="btn_search">
+                    <span class="ico_btn_search_svg">
+                        <img src="resources/images/search/search.png">
+                    </span>
+                </button>
+            </input>
+        </div>
+    </div>
+    <div style="width: 100%; height: 100%; position: absolute;">
+        <div id="map" style="width:100%; height: 100%;"></div>
+        <!--
+        <div style=" display: grid; justify-items: center;">
+            <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${apiKey}, redirect_uri=${redirectUri}, response_type='code')}">
+                <img class="btn" id="kakaoLoginBtn" src="resources/images/kakao_login_btn.png">
+            </a>
+            <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${apiKey}, redirect_uri=${redirectUri}, response_type='code')}">
+                <img class="btn" id="googleLoginBtn" src="resources/images/google_login_btn@1x.png">
+            </a>
+        </div>
+        -->
+    </div>
+    <div id="myGpsBtn" style="">
+        <img src="resources/images/rocation/my_gps.png" style="">
+    </div>
+
+    <div id="loginPopup" class="pop_wrap" style="display:none;">
+        <div class="pop_inner">
+            <p class="dsc">팝업 안내문구 입니다222.</p>
+            <button type="button" class="btn_close">닫기</button>
+        </div>
+    </div>
+</body>
+</html>
