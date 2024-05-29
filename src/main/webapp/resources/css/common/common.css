@@ -3,8 +3,9 @@ html,body {
     font-size: 14px;
     font-weight: 300;
     margin: 0 !important;
-    /*background-color: rgba(87, 56, 45, 1);*/
+    background-color: rgba(87, 56, 45, 1);
 }
+
 #logo {
     width: 4rem;
     height: 4rem;

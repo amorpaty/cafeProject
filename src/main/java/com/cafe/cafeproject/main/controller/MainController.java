@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 
-@RestController
+@RestController(value = "/")
 @RequiredArgsConstructor
 public class MainController {
 
@@ -17,7 +17,7 @@ public class MainController {
         ModelAndView mv = new ModelAndView();
         mv.addObject("nickname", params.get("nickname"));
         //mv.addObject("email", params.get("email"));
-        mv.setViewName("/main/main.html");
+        mv.setViewName("index.html");
         return mv;
     }
 }

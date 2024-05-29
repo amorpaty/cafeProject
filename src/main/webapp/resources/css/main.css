@@ -10,7 +10,7 @@
 
 .searchInputArea{
     display: flex;
-    height: 2.5rem !important;
+    height: 3rem !important;
     width: 30rem;
     border-radius: 2rem;
     box-shadow: 1px 2px 8px 3px gray;
@@ -22,7 +22,7 @@
     margin-left: 40px;
     margin-right: 15px;
     width: 23rem;
-    height: 27px;
+    height: 32px;
     font-size: 16px;
     border: white;
     margin-top: 3px;
@@ -35,9 +35,9 @@
 .btn_search {
     display: flex;
     width: 3rem;
-    height: 2.5rem;
+    height: 3rem;
     border: 0px;
-    border-radius: 0px 1rem 1rem 0;
+    border-radius: 0px 1.5rem 1.5rem 0;
 }
 
 .btn_search > .ico_btn_search_svg{
@@ -45,8 +45,8 @@
 }
 
 .btn_search > .ico_btn_search_svg > img {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.7rem;
+    height: 1.7rem;
 }
 
 .btn_search:hover{

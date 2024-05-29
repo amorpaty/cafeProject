@@ -13,6 +13,16 @@ $(window).ready(function(){
     //map 설정
     map = new kakao.maps.Map(container, defaultOptions); //지도 생성 및 객체 리턴
 
+   //로고 클릭 시 main 화면 이동
+    $("#logo").on('click', function(){
+        window.location.href = '/main';
+    })
+
+    //login 버튼 클릭 시 로그인 화면 이동
+    $(".loginBtn").on("click", function(){
+        window.location.href='/auth/login';
+    })
+
     //GPS 위치 버튼 클릭 시 내 위치 조회
     $("#myGpsBtn").on("click", function(){
         moveMyGpsLoaction();
