@@ -5,13 +5,13 @@
     text-align: center;
     top: 7rem;
     left: 50%;
-    margin: 0px -205px 0px -205px;
+    margin: 0px -205px 0px -220px;
 }
 
 .searchInputArea{
     display: flex;
-    height: 3rem !important;
-    width: 30rem;
+    width: 150%;
+    height: 3rem;
     border-radius: 2rem;
     box-shadow: 1px 2px 8px 3px gray;
     background: white;
@@ -21,8 +21,8 @@
     display: flex;
     margin-left: 40px;
     margin-right: 15px;
-    width: 23rem;
-    height: 32px;
+    width: 77%;
+    height: 82%;
     font-size: 16px;
     border: white;
     margin-top: 3px;
@@ -52,6 +52,18 @@
 .btn_search:hover{
     background-color: lightgray;
     cursor: pointer;
+}
+
+#navArea{
+    position: fixed;
+    width: 4rem;
+    height: 30%;
+    right: 25px;
+    bottom: 11rem;
+    z-index: 2;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 5px 8px 3px -3px gray;
 }
 
 .wrap{padding:10px;}
