@@ -97,12 +97,14 @@ public class LoginService {
 
             String nickname = profile.get("nickname").toString();
             String thumbnail_image_url = profile.get("thumbnail_image_url").toString();
-            String email = profile.get("email").toString();
+            String email = kakao_account.get("email").toString();
             //String email = kakao_account.get("email").toString();
 
             userInfo.put("nickname", nickname);
             userInfo.put("thumbnail_image_url", thumbnail_image_url);
             userInfo.put("email", email);
+
+            System.out.println("userInfo" +  userInfo.toString());
 
         } catch (IOException e) {
             e.printStackTrace();

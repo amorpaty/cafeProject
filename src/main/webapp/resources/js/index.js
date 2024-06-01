@@ -20,7 +20,25 @@ $(window).ready(function(){
 
     //login 버튼 클릭 시 로그인 화면 이동
     $(".loginBtn").on("click", function(){
-        window.location.href='/auth/login';
+        //window.location.href='/auth/login';
+        $("#loginPopup").show();
+    
+        //로그인 닫기 ESC키 활성화
+        $(document).on("keydown.lp_keydown", function(event) {
+            // Esc키 : 레이어 닫기
+            var keyType = event.keyCode || event.which;
+
+            if (keyType === 27 && !$("#loginPopup").is('display')) {
+                $("#loginPopup").hide();
+                $(document).off("keydown.lp_keydown");
+            }
+        });
+    })
+
+    //loginPopup 닫기
+    $("#closeLoginPopupImg").on("click", function(){
+        $("#loginPopup").hide();
+        $(document).off("keydown.lp_keydown");
     })
 
     //GPS 위치 버튼 클릭 시 내 위치 조회
@@ -32,25 +50,11 @@ $(window).ready(function(){
 // 사용자의 현재 위치로 이동
 function moveMyGpsLoaction(){
     navigator.geolocation.getCurrentPosition((position) => {
-
         if(position) {
             const positionObj = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
             }
-/*
-
-            var icon = new kakao.maps.MarkerImage(
-                'resources/images/rocation/myMarker.png',
-                new kakao.maps.Size(75, 79)
-            );
-
-            let meMarker = new kakao.maps.Marker({
-                position: new kakao.maps.LatLng(positionObj.latitude, positionObj.longitude),
-                image: icon
-            }).setMap(map);
-
-*/
             // 줌레벨 설정 / 해당 좌표로 이동
             map.setLevel(4, {anchor: new kakao.maps.LatLng(positionObj.latitude, positionObj.longitude)});
             map.setCenter(new kakao.maps.LatLng(positionObj.latitude, positionObj.longitude));
