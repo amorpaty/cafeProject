@@ -1,8 +1,10 @@
 package com.cafe.cafeproject.common.dto;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import jdk.jfr.Description;
 import lombok.Data;
+
 
 @Data
 @Entity

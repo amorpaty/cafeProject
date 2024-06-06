@@ -1,12 +1,8 @@
 package com.cafe.cafeproject.common.dto;
 
-import ch.qos.logback.core.boolex.EvaluationException;
 import jakarta.persistence.*;
 import jdk.jfr.Description;
 import lombok.Data;
-import org.checkerframework.common.aliasing.qual.Unique;
-
-import java.util.Optional;
 
 @Data
 @Entity

@@ -9,12 +9,7 @@ import com.cafe.cafeproject.common.repository.SigunguCodeRepository;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.geolatte.geom.Geometry;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -83,7 +78,6 @@ public class GeomDataExelReadApiTest {
     public List<SidoinfoDto> getReadGeomData(File file) {
 
         List<SidoinfoDto> sidoCodeDtoList = new ArrayList<>();
-        WKTReader wktReader =  new WKTReader();
         try {
             FileInputStream fis = new FileInputStream(file);
 

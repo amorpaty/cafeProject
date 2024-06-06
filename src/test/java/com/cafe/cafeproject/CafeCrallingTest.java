@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 @DataJpaTest
 @Rollback(value = false)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@SpringBootTest
 public class CafeCrallingTest {
 
     private WebDriver driver;
@@ -79,6 +78,7 @@ public class CafeCrallingTest {
         options.addArguments("--start-maximized");
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--remote-allow-origins=*");
+        options.addArguments("headless"); // 창띄우지 않고 작업
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
@@ -209,7 +209,7 @@ public class CafeCrallingTest {
             driver.get(kakaoRequestURl);
 
             // 브라우저 로딩될 때까지 잠시 기다린다.
-            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(5000));
+            driver.manage().timeouts().implicitlyWait(Duration.ofMillis(3000));
 
             // 검색 영역 찾기
             if(driver.findElements(By.id("search")).size() > 0){
@@ -242,7 +242,7 @@ public class CafeCrallingTest {
                     driver.get(moreViewUrl);
 
                     // 브라우저 로딩될 때까지 잠시 기다린다.
-                    driver.manage().timeouts().implicitlyWait(Duration.ofMillis(5000));
+                    driver.manage().timeouts().implicitlyWait(Duration.ofMillis(3000));
 
                     //상세화면 Content 영역 접근
                     if(driver.findElements(By.id("kakaoContent")).size() > 0){

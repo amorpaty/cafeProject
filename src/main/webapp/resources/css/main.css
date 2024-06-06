@@ -142,3 +142,36 @@
     color: gray;
     cursor: pointer;
 }
+
+#searchKeywordArea{
+    display: flex;
+    /*width: 150%;*/
+}
+
+.searchInputArea #keywordDiv {
+    width: 100%;
+    display: inline-flex;
+}
+
+.searchInputArea ul{
+    width: 100%;
+    padding : 0px;
+}
+
+.searchInputArea ul li {
+    display: inline-grid;
+    max-width: 6rem;
+    height: 2.2rem;
+    background: black;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+.searchInputArea ul li p {
+    padding: 4px 10px 4px 10px;
+    margin: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 10rem;
+}
