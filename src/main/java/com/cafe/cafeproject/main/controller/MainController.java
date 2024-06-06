@@ -1,5 +1,7 @@
 package com.cafe.cafeproject.main.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,13 +23,11 @@ public class MainController {
     private String redirectUri;
 
     @GetMapping("/main")
-    public ModelAndView mainView(@RequestParam HashMap<String, Object> params){
+    public ModelAndView mainView()
+    {
         ModelAndView mv = new ModelAndView();
-
         mv.addObject("apiKey", kakaoApiKey);
         mv.addObject("redirectUri", redirectUri);
-        mv.addObject("nickname", params.get("nickname"));
-        mv.addObject("email", params.get("email"));
         mv.setViewName("index.html");
         return mv;
     }

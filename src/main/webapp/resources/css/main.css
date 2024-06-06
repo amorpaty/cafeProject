@@ -71,3 +71,74 @@
 .textArea > span {color: #fff;font-weight: 500;}
 
 #googleLoginBtn{width: 21.5rem;}
+
+
+#profilePopArea{
+    z-index: 4;
+    position: absolute;
+    background-color: white;
+    width: 15rem;
+    height: 15rem;
+    right: 3rem;
+    top: 4.8rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 1px 5px 0px grey;
+}
+
+#profilePopAngcle{
+    position: absolute;
+    z-index: 4;
+    width: 0;
+    height: 0;
+    border-bottom: 12px solid white;
+    border-top: 12px solid transparent;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    right: 3.7rem;
+    top: 3.4rem;
+}
+
+#profileDiv{
+    border-bottom: 1px solid lightgray;
+    padding: 14px;
+    height: 2.5rem;
+}
+
+#nicknameSpan{
+    display: block;
+    padding: 0px 8px 5px 8px;
+    font-size: smaller;
+    font-weight: bolder;
+    color: gray;
+}
+
+#emailSpan{
+    display: block;
+    padding: 0px 8px 0px 8px;
+    font-size: smaller;
+    font-weight: bolder;
+    color: gray;
+}
+
+#menuArea{
+    border-bottom: 1px solid lightgray;
+    height: 7rem;
+}
+
+#logoutArea{
+    padding: 15px 8px 8px 8px;
+    font-size: smaller;
+    font-weight: bolder;
+    color: gray;
+}
+
+#logoutArea > #logout {
+    display: inline;
+    padding: 3px 0px 0px 8px;
+    border: 0px;
+    background: white;
+    font-size: unset;
+    font-weight: 500;
+    color: gray;
+    cursor: pointer;
+}

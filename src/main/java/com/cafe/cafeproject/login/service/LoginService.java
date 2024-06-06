@@ -1,4 +1,4 @@
-package com.cafe.cafeproject.common.login.service;
+package com.cafe.cafeproject.login.service;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -74,37 +74,41 @@ public class LoginService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
 
-            //    요청에 필요한 Header에 포함될 내용
+            // 요청에 필요한 Header에 포함될 내용
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
 
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            if(responseCode == 200){
 
-            String line = "";
-            String result = "";
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-            while ((line = br.readLine()) != null) {
-                result += line;
+                String line = "";
+                String result = "";
+
+                while ((line = br.readLine()) != null) {
+                    result += line;
+                }
+
+                JSONParser parser = new JSONParser();
+                JSONObject jsonObject = (JSONObject) parser.parse(result);
+
+                JSONObject kakao_account = (JSONObject) jsonObject.get("kakao_account");
+                JSONObject profile = (JSONObject) kakao_account.get("profile");
+
+                String nickname = profile.get("nickname").toString();
+                String thumbnail_image_url = profile.get("thumbnail_image_url").toString();
+                String email = kakao_account.get("email").toString();
+
+                userInfo.put("nickname", nickname);
+                userInfo.put("thumbnail", thumbnail_image_url);
+                userInfo.put("email", email);
+
+                return userInfo;
+            }else{
+                throw new IOException("responseCode : " + responseCode);
             }
-
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) parser.parse(result);
-
-            JSONObject kakao_account = (JSONObject) jsonObject.get("kakao_account");
-            JSONObject profile = (JSONObject) kakao_account.get("profile");
-
-            String nickname = profile.get("nickname").toString();
-            String thumbnail_image_url = profile.get("thumbnail_image_url").toString();
-            String email = kakao_account.get("email").toString();
-            //String email = kakao_account.get("email").toString();
-
-            userInfo.put("nickname", nickname);
-            userInfo.put("thumbnail_image_url", thumbnail_image_url);
-            userInfo.put("email", email);
-
-            System.out.println("userInfo" +  userInfo.toString());
 
         } catch (IOException e) {
             e.printStackTrace();

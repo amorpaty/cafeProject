@@ -20,9 +20,34 @@
             <img id="logo" src="resources/images/logo.png"/>
             <div class="headerBtnArea">
                 <div class="loginArea">
-                    <span class="loginBtn">로그인</span>
+                    <div th:if="${session.userInfo} != null" style="display: flex;">
+                        <div id="profileArea" style=" display: inline; width: 3rem; padding: -1px; margin-right: 1rem; cursor: pointer;">
+                                <img th:src="${session.userInfo['thumbnail']}" style="border-radius: 66px; width: 3rem; height: 3rem; ">
+                        </div>
+                       <!-- <span th:text="${nickname}" style=" display: inline; width: 3rem; line-height: 3;"></span>-->
+                    </div>
+                    <div th:if="${session.userInfo} == null" style="display: flex;">
+                        <span class="loginBtn">로그인</span>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <diV th:if="${session.userInfo} != null " id="profilePopAngcle" style="display: none;"></diV>
+    <div th:if="${session.userInfo} != null " id="profilePopArea" style="display: none;">
+        <div id="profileDiv">
+            <div>
+                <span id="nicknameSpan" th:text="${session.userInfo['nickname']}"></span>
+                <span id="emailSpan" th:text="${session.userInfo['email']}"></span>
+            </div>
+        </div>
+        <div id="menuArea">
+
+        </div>
+        <div id="logoutArea">
+            <button id="logout">
+                <span>로그아웃</span>
+            </button>
         </div>
     </div>
     <div class="searchMainArea">
