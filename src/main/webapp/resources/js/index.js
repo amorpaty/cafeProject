@@ -14,8 +14,12 @@ $(window).ready(function(){
         window.location.href = '/main';
     })
 
+    //GPS 현재 위치 이동
+    $("#myGpsBtn").on('click', function (){
+        moveMyGpsLoaction();
+    })
+
     initMap();
-    getloginPopup();
     getKeywordList();
 })
 
