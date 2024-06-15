@@ -1,13 +1,14 @@
 package com.cafe.cafeproject.common.dto;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
-import org.springframework.data.geo.Point;
+import lombok.*;
 
 @Data
 @Entity
+@Builder
 @Table(name = "t_cafeinfo")
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString(callSuper = true)
 public class CafeinfoDto {
 

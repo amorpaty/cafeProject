@@ -15,24 +15,6 @@
     <script type="text/javascript" src="resources/js/login/login.js"></script>
 </head>
 <body>
-    <div class="header">
-        <div style="height: 100%;">
-            <img id="logo" src="resources/images/logo.png"/>
-            <div class="headerBtnArea">
-                <div class="loginArea">
-                    <div th:if="${session.userInfo} != null" style="display: flex;">
-                        <div id="profileArea" style=" display: inline; width: 3rem; padding: -1px; margin-right: 1rem; cursor: pointer;">
-                                <img th:src="${session.userInfo['thumbnail']}" style="border-radius: 66px; width: 3rem; height: 3rem; ">
-                        </div>
-                       <!-- <span th:text="${nickname}" style=" display: inline; width: 3rem; line-height: 3;"></span>-->
-                    </div>
-                    <div th:if="${session.userInfo} == null" style="display: flex;">
-                        <span class="loginBtn">로그인</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <diV th:if="${session.userInfo} != null " id="profilePopAngcle" style="display: none;"></diV>
     <div th:if="${session.userInfo} != null " id="profilePopArea" style="display: none;">
         <div id="profileDiv">
@@ -53,7 +35,7 @@
     <div class="searchMainArea">
         <div class="searchInputArea">
             <input type="text" id="searchKeyword" name="keyword">
-                <button type="submit" class="btn_search">
+                <button type="button" class="btn_search">
                     <span class="ico_btn_search_svg">
                         <img src="resources/images/search/search.png">
                     </span>
@@ -61,49 +43,186 @@
             </input>
         </div>
     </div>
-    <div class="searchMainArea" style="top:11rem; width: 32rem;">
+    <div class="searchMainArea" style="top: 11rem;
+        width: 32rem;
+        height: 7rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+    ">
         <div class="searchInputArea" style="width: 100%;
-    text-align: center;
-    align-items: center;
-    background-color: unset;
-    box-shadow: none;">
+             width: 100%;
+            text-align: center;
+            align-items: center;
+            background-color: white;
+            box-shadow: none;
+            display: contents;
+            height: 100rem;
+        ">
             <div id="keywordDiv">
                 <ul>
-                    <li><p style="color: white;">dddddddd</p></li>
-                    <li><p style="color: white;">dddddddddddddd</p></li>
-                    <li><p style="color: white;">dddddd</p></li>
-                    <li><p style="color: white;">ddddddddddddddddddddd</p></li>
-                    <li><p style="color: white;">ddddddddddddd</p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                </ul>
+                <ul>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
+                    <li><p></p></li>
                 </ul>
             </div>
         </div>
+        <div class="searchInputArea" style="
+            box-shadow: unset;
+            background-color: unset;
+            width: 0;
+            position: absolute;
+            z-index: 5;
+            right: -8px;
+            display: grid;
+            top: 0px;
+            ">
+            <img src="resources/images/cancel.png" style="
+                    width: 2rem;
+                    height: 2rem;
+                    background-color: white;
+                    border-radius: 10rem;
+                    box-shadow: 0px 0px 1px 1px gray;
+                    cursor: pointer;
+            ">
+        </div>
     </div>
     <div style="width: 100%; height: 100%; position: absolute;">
-        <div id="map" style="width:100%; height: 100%;"></div>
-    </div>
-    <div id="navArea">
-        <div style="height: 21%;text-align: center;/* margin-top: 0rem; */padding-top: 0px;">
-            <img src="resources/images/like_heart.png" style=" width: 3rem; height: 3rem;">
+        <div class="header">
+            <div style="height: 100%;">
+                <img id="logo" src="resources/images/logo.png"/>
+                <div class="headerBtnArea">
+                    <div class="loginArea">
+                        <div th:if="${session.userInfo} != null" style="display: flex;">
+                            <div id="profileArea" style=" display: inline; width: 3rem; padding: -1px; margin-right: 1rem; cursor: pointer;">
+                                <img th:src="${session.userInfo['thumbnail']}" style="border-radius: 66px; width: 3rem; height: 3rem; ">
+                            </div>
+                        </div>
+                        <div th:if="${session.userInfo} == null" style="display: flex;">
+                            <span class="loginBtn">로그인</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="text-align: center;height: 12%;border-top: 1px solid lightgray;border-bottom: 1px solid lightgray;">
-            <span style="font-size: 9px;">최근 본 카페 </span>
+        <!-- 카페 상세 정보 영역 Start -->
+        <div class="detailCafeInfo">
+            <div class="cafeTitleArea">
+                <div class="titleArea">
+                    <div style="display: inline;float: left;">
+                        <img class="thumnail" src="" />
+                    </div>
+                    <div class="title" style="display: inline;">
+                        <div class="placeName"></div>
+                        <div class="close" title="닫기"></div>
+                    </div>
+                </div>
+                <div style="display: flex; height: 4rem; margin-top: 1rem;">
+                    <div style="width:9.6rem;"></div>
+                    <div style="width:9.6rem;"></div>
+                    <div style="width:9.8rem;"></div>
+                </div>
+            </div>
+            <div class="cafeInfoArea">
+                <div>
+                </div>
+            </div>
         </div>
-        <div style="height: 63%;overflow-y: auto;overflow-x: hidden;scrollbar-width: none;">
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
+        <!-- 카페 상세 정보 영역 End -->
+        <!-- map 영역  Start -->
+        <div id="map" style="width:100%; height: 90%;">
+
+            <div id="navArea">
+                <div style="height: 21%;text-align: center;/* margin-top: 0rem; */padding-top: 0px;">
+                    <img src="resources/images/like_heart.png" style=" width: 3rem; height: 3rem;">
+                </div>
+                <div style="text-align: center;height: 12%;border-top: 1px solid lightgray;border-bottom: 1px solid lightgray;">
+                    <span style="font-size: 9px;">최근 본 카페 </span>
+                </div>
+                <div style="height: 63%;overflow-y: auto;overflow-x: hidden;scrollbar-width: none;">
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="myGpsBtn" style="">
+                <img src="resources/images/rocation/my_gps.png" style="">
+            </div>
         </div>
-    </div>
-    <div id="myGpsBtn" style="">
-        <img src="resources/images/rocation/my_gps.png" style="">
+        <!-- map 영역  End -->
     </div>
 
     <!-- 로그인 팝업 (레이어 팝업 )-->

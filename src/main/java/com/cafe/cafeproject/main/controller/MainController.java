@@ -1,15 +1,15 @@
 package com.cafe.cafeproject.main.controller;
 
+import com.cafe.cafeproject.common.dto.CafeinfoDto;
 import com.cafe.cafeproject.common.dto.KeywordDto;
 import com.cafe.cafeproject.main.service.MainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(("/main"))
@@ -23,7 +23,6 @@ public class MainController {
     private String redirectUri;
 
     private final MainService mainService;
-
 
     @GetMapping
     public ModelAndView mainView()
@@ -45,11 +44,22 @@ public class MainController {
     }
 
     /**
-     * 키워드 전체 목록 조회 - 검색 용도
+     * 카페 목록 조회 (조건 검색)
+     * @param params
      * @return
      */
-    @GetMapping("/getTotKeywordList")
-    public List<KeywordDto> getTotKeywordList(){
-        return null;
+    @PostMapping("/getCafeList")
+    public List<CafeinfoDto> getCafeinfoDtoList(@RequestParam Map<String, Object> params){
+        return mainService.getCafeList(params);
+    }
+
+    /**
+     * 카페 썸네일 조회 (카카오 API 사용)
+     * @param param
+     * @return
+     */
+    @PostMapping("/getCafeThumnail")
+    public Map<String, Object> getCafeThumnail(@RequestParam Map<String, Object> param){
+        return mainService.getCafeThumnail(param);
     }
 }

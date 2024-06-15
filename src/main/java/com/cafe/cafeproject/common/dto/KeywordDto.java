@@ -12,7 +12,7 @@ public class KeywordDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long keywordId;
+    private String keywordId;
 
     @Column
     private String keywordName;

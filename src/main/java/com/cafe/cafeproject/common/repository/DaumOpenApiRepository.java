@@ -2,9 +2,18 @@ package com.cafe.cafeproject.common.repository;
 
 import com.cafe.cafeproject.common.dto.CafeinfoDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface DaumOpenApiRepository extends JpaRepository<CafeinfoDto, String> {
 
+    @Query(value = " select distinct A.* " +
+            " from (select distinct  BE.* " +
+            " from \"cafeProject\".T_cafeinfo AS BE ) as A " +
+            " inner join (select distinct id from \"cafeProject\".t_cafe_keyword_info group by id) as B " +
+            " ON A.ID != B.ID", nativeQuery = true)
+    public List<CafeinfoDto> findCafeInfoList();
 }

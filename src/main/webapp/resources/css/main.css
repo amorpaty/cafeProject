@@ -1,7 +1,7 @@
 .searchMainArea{
     position: absolute;
     display: block;
-    z-index: 2;
+    z-index: 3;
     text-align: center;
     top: 7rem;
     left: 50%;
@@ -79,7 +79,7 @@
     background-color: white;
     width: 15rem;
     height: 15rem;
-    right: 3rem;
+    right: 1rem;
     top: 4.8rem;
     border-radius: 0.5rem;
     box-shadow: 0px 1px 5px 0px grey;
@@ -94,7 +94,7 @@
     border-top: 12px solid transparent;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
-    right: 3.7rem;
+    right: 1.7rem;
     top: 3.4rem;
 }
 
@@ -150,22 +150,26 @@
 
 .searchInputArea #keywordDiv {
     width: 100%;
-    display: inline-flex;
+    display: inline-grid;
 }
 
 .searchInputArea ul{
     width: 100%;
     padding : 0px;
+    margin: 1px;
 }
 
 .searchInputArea ul li {
     display: inline-grid;
-    max-width: 6rem;
+    max-width: 10rem;
     height: 2.2rem;
     background: goldenrod;
     border-radius: 2rem;
     cursor: pointer;
     box-shadow: 0px 0px 4px 1px lightgray;
+}
+.searchInputArea ul li.on{
+    background: rgba(87, 56, 45, 1);
 }
 
 .searchInputArea ul li p {
@@ -175,4 +179,74 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 10rem;
+    color: white;
+    line-height: 22px;
+    font-size: xx-small;
 }
+
+.detailCafeInfo{
+    display: none;
+    position: absolute;
+    z-index: 3;
+    background-color: white;
+    width : 32rem;
+    height: 90%;
+    box-shadow: 0px 1px 2px #888;
+}
+
+.detailCafeInfo .cafeTitleArea {
+    display: grid;
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+    background-color: goldenrod;
+}
+
+.detailCafeInfo .cafeTitleArea .titleArea{
+    display: flex;
+}
+
+.detailCafeInfo .cafeTitleArea .titleArea .thumnail{
+    width: 7rem;
+}
+
+.detailCafeInfo .cafeTitleArea .title{
+    display: flex;
+    width: 100%;
+}
+
+.detailCafeInfo .cafeTitleArea .title .placeName{
+    display: inline;
+    font-size: large;
+    font-weight: 800;
+    padding-left: 1rem;
+}
+
+.cafeTitleArea .close {position: absolute;top:20px;right: 25px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+.cafeTitleArea .close:hover {cursor: pointer;}
+
+.wrap {position: absolute;
+    left: 0;
+    bottom: 40px;
+    width: 288px;
+    height: 120px;
+    margin-left: -144px;
+    text-align: left;
+    overflow: hidden;
+    font-size: 12px;
+    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+    line-height: 1.5;
+}
+.wrap * {padding: 0;margin: 0;}
+.wrap .overlay_info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+.wrap .overlay_info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+.overlay_info .title {padding: 5px 0 0 10px;height: 30px;background: rgba(87, 56, 45, 1);;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+.overlay_info .title{color: white;}
+.overlay_info .close {position: absolute;top: 19px;right: 20px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+.overlay_info .close:hover {cursor: pointer;}
+.overlay_info .body {position: relative;overflow: hidden;}
+.overlay_info .desc {position: relative;margin: 30px 0 0 1px;height: 75px;}
+.desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+.overlay_info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+.overlay_info:after {content: '';position: absolute;margin-left: -21px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+.overlay_info .link {color: #5085BB;}
+.overlay_info .thumbnail{width: 4rem; height: 4rem; margin: 1rem;}

@@ -202,7 +202,7 @@ public class CafeCrallingTest {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
 
 
-        List<CafeinfoDto> cafeinfoDtoList = daumOpenApiRepository.findAll();
+        List<CafeinfoDto> cafeinfoDtoList = daumOpenApiRepository.findCafeInfoList();
 
         for(CafeinfoDto cafeinfoDto : cafeinfoDtoList) {
             // (1) 브라우저에서 url로 이동한다.

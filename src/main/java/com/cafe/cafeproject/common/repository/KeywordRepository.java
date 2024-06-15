@@ -13,13 +13,13 @@ import java.util.List;
 @Repository
 public interface KeywordRepository extends JpaRepository<KeywordDto, String> {
 
-    @Query(value = "select COUNT(A.keyword_id) as cnt, A.keyword_id, A.keyword_name"
+    @Query(value = "select COUNT(A.keyword_id) as cnt, A.keyword_id , A.keyword_name"
             + " from \"cafeProject\".t_keyword AS A"
             + " inner join \"cafeProject\".t_cafe_keyword_info AS B"
             + " on A.keyword_id = B.keyword_id"
             + " group by A.keyword_id, A.keyword_name"
             + " order by CNT DESC"
-            + " limit 5", nativeQuery = true)
+            + " limit 50", nativeQuery = true)
     public List<KeywordDto> getKeywordList();
 
 }

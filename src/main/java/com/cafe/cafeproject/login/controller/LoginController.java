@@ -1,6 +1,6 @@
 package com.cafe.cafeproject.login.controller;
 
-import com.cafe.cafeproject.common.service.SesstionStorage;
+import com.cafe.cafeproject.common.storage.SesstionStorage;
 import com.cafe.cafeproject.login.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

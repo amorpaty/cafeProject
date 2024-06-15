@@ -1,4 +1,4 @@
-package com.cafe.cafeproject.common.service;
+package com.cafe.cafeproject.common.storage;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
