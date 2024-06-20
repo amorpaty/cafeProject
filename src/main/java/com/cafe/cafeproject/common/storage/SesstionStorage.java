@@ -37,7 +37,6 @@ public class SesstionStorage {
      */
     public void destroySesstion(HttpServletRequest request){
         HttpSession session = request.getSession();
-
         if(!ObjectUtils.isEmpty(session)){
             session.invalidate();
         }

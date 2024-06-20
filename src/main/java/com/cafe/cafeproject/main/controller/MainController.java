@@ -3,6 +3,7 @@ package com.cafe.cafeproject.main.controller;
 import com.cafe.cafeproject.common.dto.CafeinfoDto;
 import com.cafe.cafeproject.common.dto.KeywordDto;
 import com.cafe.cafeproject.main.service.MainService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;

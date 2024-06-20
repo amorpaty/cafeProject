@@ -3,9 +3,7 @@ package com.cafe.cafeproject.main.service;
 import com.cafe.cafeproject.common.config.QueryDSLConfig;
 import com.cafe.cafeproject.common.dto.CafeinfoDto;
 import com.cafe.cafeproject.common.dto.KeywordDto;
-import com.cafe.cafeproject.common.repository.CafeInfoRepository;
 import com.cafe.cafeproject.common.repository.KeywordRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -105,7 +103,6 @@ public class MainService {
             List<Map<String, String>> documents = (ArrayList)jsonObject.get("documents");
 
             if(CollectionUtils.isNotEmpty(documents)){
-                System.out.println(documents.get(0));
                 result.put("image_url",documents.get(0).get("image_url"));
                 result.put("thumbnail_url", documents.get(0).get("thumbnail_url"));
                 return result;

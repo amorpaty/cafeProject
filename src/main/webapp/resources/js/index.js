@@ -5,16 +5,19 @@ const defaultOptions = { //지도를 생성할 때 필요한 기본 옵션
     level: 11 //지도의 레벨(확대, 축소 정도)
 };
 
+const imageSrc = "/resources/images/rocation/cafeMarker.png"
+
 let map;
 let searchKeywordListArr = [];
 let markers = [];
+let curCafeMaker = null;
 let targetOverlay = null;
-let imageSrc = "/resources/images/rocation/cafeMarker.png"
 
 $(window).ready(function(){
 
     initMap();
     getKeywordList();
+    setCurrentCafe();
 
     //로고 클릭 시 main 화면 이동
     $("#logo").on('click', function(){
@@ -62,6 +65,30 @@ $(window).ready(function(){
     // 카페 상세 영역 닫기
     $(".detailCafeInfo .titleArea .close").on('click', function(){
         $(".detailCafeInfo").css("display", "none");
+        $(".detailCafeInfo").removeClass("on");
+    })
+
+    //토급 카페 상세 영역 show/hide
+    $(".Shadow .toggle").on('click', function(){
+        let detailCafeInfo = $(".detailCafeInfo");
+        let contentArea = $("#contentArea");
+        let shadowArea = $("#shadow");
+
+        if(detailCafeInfo.is(".on")){
+            contentArea.animate({width: "0px"}, 1000);
+            shadowArea.animate({left: "0px"}, 1000);
+            contentArea.css("visibility",  "hidden");
+
+            detailCafeInfo.removeClass("on");
+            $(this).addClass("on");
+        }else{
+            contentArea.animate({width : "32rem"}, 1000);
+            shadowArea.animate({left: "449px"}, 1000);
+            contentArea.css("visibility",  "visible");
+
+            detailCafeInfo.addClass("on");
+            $(this).removeClass("on");
+        }
     })
 })
 
@@ -96,6 +123,10 @@ function getSearchCafe(){
         searchKeywordList : searchKeywordListArr.join()
     }
     setMarkers(null);
+
+    if(curCafeMaker){
+        curCafeMaker.setMap(null);
+    }
 
     if(targetOverlay){
         closeOverlay();
@@ -136,7 +167,7 @@ function addMarkers(markerList){
         marker.setMap(map);
         markers.push(marker);
 
-        //tooltip 생성
+        //마커 클릭 이벤트 tooltip 생성
         kakao.maps.event.addListener(marker, 'click', function() {
 
             let param = {
@@ -165,9 +196,9 @@ function addMarkers(markerList){
                     map.setLevel(3, {anchor: overlayPosition});
                     map.setCenter(overlayPosition);
 
-
+                    //상세화면 표출
                     setDetailContent(markerList[i]);
-
+                    setCurrentCafe(markerList[i]);
                 }else {
                 }
             })
@@ -175,11 +206,112 @@ function addMarkers(markerList){
     }
 }
 
+//최근 본 카페 추가
+function setCurrentCafe(targetMarker){
+
+    let targetId = $("#curCafeList UL");
+    $("li", targetId).remove();
+
+    setCookie(targetMarker);
+
+    let cookies = getCookie();
+
+    for (let cookiesKey in cookies) {
+        let cookieMarker = JSON.parse($.cookie(cookiesKey)); //Json으로 파싱
+
+        let li = $("<li style='padding: 0.5rem 0rem 0rem 0.5rem; cursor: pointer;'>")
+        let img = $("<img style='width:3rem;'>").attr("src", cookieMarker.thumbnail);
+
+        li.data(cookieMarker);
+        li.append(img);
+        targetId.append(li);
+
+        $(li).on("click", function(){
+            let data = $(this).data();
+            // 마커 이미지의 이미지 크기 입니다
+            var imageSize = new kakao.maps.Size(40, 40);
+
+            // 마커 이미지를 생성합니다
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+            if(curCafeMaker){
+                curCafeMaker.setMap(null);
+            }
+
+            curCafeMaker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(Number(data.y), Number(data.x)),
+                title : data.place_name,
+                image : markerImage // 마커 이미지
+            });
+
+            // 마커가 지도 위에 표시되도록 설정합니다
+            curCafeMaker.setMap(map);
+
+            if(targetOverlay){
+                closeOverlay();
+            }
+
+            targetOverlay = createOverlay(data);
+            let content = targetOverlay.getContent();
+            content = content.split("replaceThumnail").join(data.thumbnail);
+
+            targetOverlay.setContent(content);
+            targetOverlay.setMap(map);
+
+            let overlayPosition = new kakao.maps.LatLng(Number(data.y) + 0.001 , data.x);
+
+            // 줌레벨 설정 / 해당 좌표로 이동
+            map.setLevel(3, {anchor: overlayPosition});
+            map.setCenter(overlayPosition);
+
+            //상세화면 표출
+            setDetailContent(data);
+        })
+    }
+}
+
+function setCookie(targetMarker){
+    let cookies = $.cookie();
+
+    if(!cookies && targetMarker){
+        //쿠키를 Object 형태로 넣으려면 JSON String으로 넣었다가
+        //JSOn 형태로 parsing해서 쓰면 된다.
+        $.cookie(targetMarker.place_name,  JSON.stringify(targetMarker),  { expires:360, path: '/' });
+    }else if(cookies && targetMarker){
+        $.removeCookie(targetMarker.place_name,{ expires:360, path: '/' } )
+        $.cookie(targetMarker.place_name,JSON. stringify(targetMarker),{ expires:360, path: '/' } )
+    }
+}
+
+// 쿠키 가져오기
+function getCookie(){
+    return $.cookie();
+}
+
 //상세영역 셋팅
 function setDetailContent(targetMarker){
-    $(".placeName").text(targetMarker.place_name);
     $(".titleArea .thumnail").attr('src', targetMarker.thumbnail);
-    $(".detailCafeInfo").css("display", "block");
+    $(".placeName").text(targetMarker.place_name);
+    $(".roadAddressName").text(targetMarker.road_address_name);
+    $(".phone").text(targetMarker.phone);
+
+    if(!$(".detailCafeInfo").is("on")){
+        $(".detailCafeInfo").css("display", "block");
+        $(".detailCafeInfo").addClass("on");
+    }
+}
+
+//최근 카페 검색 목록 
+//쿠키 사용
+function getCurrentList(){
+
+    let cookies = $.cookie();
+
+    if(!!cookies){//쿠키가 없으면
+        // 최근 본 카페 목록이 없습니다 문구 노출
+    }else{//쿠키가 있으면
+        //최근 본 카페 목록에 표출 
+    }
 }
 
 //overlay 생성
@@ -206,14 +338,10 @@ function closeOverlay() {
 //get overlay 영역 html
 function getContent(targetMarker){
 
-    let param = {
-        place_name : targetMarker.place_name
-    }
-
     var content = '<div class="wrap">';
     content += '     <div class="overlay_info">';
     content += '         <div class="title">';
-    content += '            <div>' +  targetMarker.place_name   + '</div>';
+    content += '            <div style="line-height: 2;">' +  targetMarker.place_name   + '</div>';
     content += '            <div class="close" onclick="closeOverlay()" title="닫기"></div>';
     content += '         </div>';
     content += '         <div style="display:flex;">';

@@ -11,6 +11,8 @@
     <!-- services 라이브러리 불러오기 -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ffb91c5a6ff0bf7cef8bbea6c72cd221&libraries=services"></script>
     <script type="text/javascript" src="resources/js/common/jQuery/jquery-3.7.1.js"></script>
+    <!-- jQuery cookie 라이브러리 () -->
+    <script type="text/javascript" src="resources/js/common/jQuery/jquery.cookie.js"></script>
     <script type="text/javascript" src="resources/js/index.js"></script>
     <script type="text/javascript" src="resources/js/login/login.js"></script>
 </head>
@@ -172,31 +174,51 @@
         </div>
         <!-- 카페 상세 정보 영역 Start -->
         <div class="detailCafeInfo">
-            <div class="cafeTitleArea">
-                <div class="titleArea">
-                    <div style="display: inline;float: left;">
-                        <img class="thumnail" src="" />
+            <div id="contentArea">
+                <div class="cafeTitleArea">
+                    <div class="titleArea">
+                        <div style="display: inline;float: left;">
+                            <img class="thumnail" src="" />
+                        </div>
+                        <div class="title" style="display: inline;">
+                            <div class="placeName"></div>
+                            <div class="roadAddressName"></div>
+                            <div class="phone"></div>
+                            <div class="close" title="닫기"></div>
+                        </div>
                     </div>
-                    <div class="title" style="display: inline;">
-                        <div class="placeName"></div>
-                        <div class="close" title="닫기"></div>
+                    <div style="display: flex; height: 3rem; margin-top: 1rem;">
+                        <div style="width:9.6rem; background-color: rgba(87, 56, 45, 1); text-align: center; line-height: 3;">
+                            <span class="" style="color: white;font-weight: 500;">메뉴</span>
+                        </div>
+                        <div style="width: 9.6rem;
+                            background-color: rgba(87, 56, 45, 1);
+                            border-color: white;
+                            border-left: 1px solid goldenrod;
+                            border-right: 1px solid goldenrod;
+                            line-height: 3;
+                            text-align: center;
+                        ">
+                            <span class="" style="color: white;font-weight: 500;">방문로그</span>
+                        </div>
+                        <div style="width:9.8rem; background-color: rgba(87, 56, 45, 1); text-align: center;line-height: 3;">
+                            <span class="" style="color: white;font-weight: 500;">사진</span>
+                        </div>
                     </div>
                 </div>
-                <div style="display: flex; height: 4rem; margin-top: 1rem;">
-                    <div style="width:9.6rem;"></div>
-                    <div style="width:9.6rem;"></div>
-                    <div style="width:9.8rem;"></div>
+                <div class="cafeInfoArea">
+                    <div>
+                    </div>
                 </div>
             </div>
-            <div class="cafeInfoArea">
-                <div>
-                </div>
+            <div id="shadow" class="Shadow">
+                <div class="bar"></div>
+                <span id="shadow.toggle" class="toggle"></span>
             </div>
         </div>
         <!-- 카페 상세 정보 영역 End -->
         <!-- map 영역  Start -->
         <div id="map" style="width:100%; height: 90%;">
-
             <div id="navArea">
                 <div style="height: 21%;text-align: center;/* margin-top: 0rem; */padding-top: 0px;">
                     <img src="resources/images/like_heart.png" style=" width: 3rem; height: 3rem;">
@@ -204,18 +226,8 @@
                 <div style="text-align: center;height: 12%;border-top: 1px solid lightgray;border-bottom: 1px solid lightgray;">
                     <span style="font-size: 9px;">최근 본 카페 </span>
                 </div>
-                <div style="height: 63%;overflow-y: auto;overflow-x: hidden;scrollbar-width: none;">
-                    <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
+                <div id="curCafeList" style="height: 63%;overflow-y: auto;overflow-x: hidden;scrollbar-width: none;">
+                    <ul style="list-style: none; display: contents;"></ul>
                 </div>
             </div>
             <div id="myGpsBtn" style="">
