@@ -6,14 +6,28 @@ const defaultOptions = { //지도를 생성할 때 필요한 기본 옵션
 };
 
 const imageSrc = "/resources/images/rocation/cafeMarker.png"
+const favImageMapSrc = "/resources/images/rocation/favMarker.png"
+const favImageSrc = "/resources/images/fav/like_heart.png"
+const defaultFavImageSrc = "/resources/images/fav/default_like_heart.png"
 
 let map;
 let searchKeywordListArr = [];
 let markers = [];
+let favMarkers = [];
 let curCafeMaker = null;
 let targetOverlay = null;
+let tabIndex = null;
 
 $(window).ready(function(){
+
+    jQuery.ajaxSetup({
+        beforeSend: function () {
+            $('#loading_spinner').show();
+        },
+        complete: function () {
+            $('#loading_spinner').hide();
+        }
+    });
 
     initMap();
     getKeywordList();
@@ -40,27 +54,6 @@ $(window).ready(function(){
             getSearchCafe();
         }
     })
-    
-    // 키워드 클릭 시 카페 조회
-    $("#keywordDiv LI").on("click", function (){
-        let targetLi = $(this);
-        let classFlag = targetLi.hasClass("on");
-        let data = targetLi.data();
-
-        if(classFlag){
-            targetLi.removeClass("on");
-            searchKeywordListArr.forEach((d, idx) => {
-                if(d === data.keywordId){
-                    searchKeywordListArr.splice(idx, 1);
-                };
-            })
-            getSearchCafe();
-        }else{
-            targetLi.addClass("on");
-            searchKeywordListArr.push(data.keywordId);
-            getSearchCafe();
-        }
-    })
 
     // 카페 상세 영역 닫기
     $(".detailCafeInfo .titleArea .close").on('click', function(){
@@ -75,21 +68,36 @@ $(window).ready(function(){
         let shadowArea = $("#shadow");
 
         if(detailCafeInfo.is(".on")){
-            contentArea.animate({width: "0px"}, 1000);
-            shadowArea.animate({left: "0px"}, 1000);
+            contentArea.animate({width: "0px"}, 500);
+            shadowArea.animate({left: "0px"}, 500);
             contentArea.css("visibility",  "hidden");
 
             detailCafeInfo.removeClass("on");
             $(this).addClass("on");
         }else{
-            contentArea.animate({width : "32rem"}, 1000);
-            shadowArea.animate({left: "449px"}, 1000);
+            contentArea.animate({width : "32rem"}, 500);
+            shadowArea.animate({left: "449px"}, 500);
             contentArea.css("visibility",  "visible");
 
             detailCafeInfo.addClass("on");
             $(this).removeClass("on");
         }
     })
+
+    // tab메뉴 선택
+    $(".detailTab").on('click', function(){
+        tabIndex = $(this).attr("tabIndex");
+
+        if(!$(this).hasClass("on")){
+            $(".detailTab").removeClass("on");
+            $(".detailArea").removeClass("active");
+
+            $(this).addClass("on");
+            $(".detailArea[tabindex=" + tabIndex +"]").addClass("active");
+        }
+    })
+
+
 })
 
 //map Setting
@@ -105,12 +113,44 @@ function getKeywordList(){
 
     $.get("/main/getKeywordList", null, function(result){
         if(result && result.length > 0){
-            let targetLiList = $(".searchInputArea #keywordDiv LI")
+            let target = $(".searchInputArea #keywordDiv")
+            let ul = $("<ul>")
 
             for (let i = 0; i < result.length; i++) {
+
+                if(i%5 == 0){
+                    ul = $("<ul>")
+                }
+                let li = $("<li>")
+                let p = $("<p>")
                 let keywordData = result[i];
-                $(targetLiList[i]).data(keywordData);
-                $("P", targetLiList[i]).text(keywordData.keywordName);
+                li.data(keywordData);
+                p.text(keywordData.keywordName);
+                li.append(p);
+                ul.append(li);
+                target.append(ul);
+
+                // 키워드 클릭 시 카페 조회
+                li.on("click", function (){
+                    let targetLi = $(this);
+                    let classFlag = targetLi.hasClass("on");
+                    let data = targetLi.data();
+
+                    if(classFlag){
+                        targetLi.removeClass("on");
+                        searchKeywordListArr.forEach((d, idx) => {
+                            if(d === data.keywordId){
+                                searchKeywordListArr.splice(idx, 1);
+                            };
+                        })
+                        getSearchCafe();
+                    }else{
+                        targetLi.addClass("on");
+                        searchKeywordListArr.push(data.keywordId);
+                        getSearchCafe();
+                    }
+                })
+
             }
         }
     })
@@ -206,6 +246,85 @@ function addMarkers(markerList){
     }
 }
 
+// 카페 찜 목록 POI 표출
+function getFavariteList(target) {
+
+    if($(target).hasClass("on")){
+
+        if(favMarkers.length > 0){
+            for (var i = 0; i < favMarkers.length; i++) {
+                favMarkers[i].setMap(null);
+            }
+            favMarkers = [];
+        }
+        $(target).removeClass("on");
+        $(target).attr("src", defaultFavImageSrc);
+
+    }else if(!$(target).hasClass("on")){
+
+        $.post("/main/fav/selectFavList", null, function(favResultMarkers){
+            if(favResultMarkers.length > 0){
+                // 마커 이미지의 이미지 크기 입니다
+                var imageSize = new kakao.maps.Size(40, 40);
+
+                // 마커 이미지를 생성합니다
+                var markerImage = new kakao.maps.MarkerImage(favImageMapSrc, imageSize);
+
+                for (let i = 0; i < favResultMarkers.length; i++) {
+                    // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                    var marker = new kakao.maps.Marker({
+                        position: new kakao.maps.LatLng(Number(favResultMarkers[i].y), Number(favResultMarkers[i].x)),
+                        title : favResultMarkers[i].place_name,
+                        image : markerImage // 마커 이미지
+                    });
+                    // 마커가 지도 위에 표시되도록 설정합니다
+                    marker.setMap(map);
+                    favMarkers.push(marker);
+
+                    //마커 클릭 이벤트 tooltip 생성
+                    kakao.maps.event.addListener(marker, 'click', function() {
+
+                        let param = {
+                            place_name :  favResultMarkers[i].place_name
+                        }
+
+                        if(targetOverlay){
+                            closeOverlay();
+                        }
+
+                        $.post("/main/getCafeThumnail", param, function(result){
+                            if(result){
+                                let thumbnail =  result.thumbnail_url;
+                                favResultMarkers[i].thumbnail = thumbnail;
+
+                                targetOverlay = createOverlay(favResultMarkers[i]);
+                                let content = targetOverlay.getContent();
+                                content = content.split("replaceThumnail").join(thumbnail);
+
+                                targetOverlay.setContent(content);
+                                targetOverlay.setMap(map);
+
+                                let overlayPosition = new kakao.maps.LatLng(Number(favResultMarkers[i].y) + 0.001 , favResultMarkers[i].x);
+
+                                // 줌레벨 설정 / 해당 좌표로 이동
+                                map.setLevel(3, {anchor: overlayPosition});
+                                map.setCenter(overlayPosition);
+
+                                //상세화면 표출
+                                setDetailContent(favResultMarkers[i]);
+                                setCurrentCafe(favResultMarkers[i]);
+                            }else {
+                            }
+                        })
+                    });
+                }
+                $(target).addClass("on");
+                $(target).attr("src", favImageSrc);
+            }
+        })
+    }
+}
+
 //최근 본 카페 추가
 function setCurrentCafe(targetMarker){
 
@@ -214,15 +333,15 @@ function setCurrentCafe(targetMarker){
 
     setCookie(targetMarker);
 
-    let cookies = getCookie();
+    let cookies = Object.entries(getCookie()).reverse()
 
     for (let cookiesKey in cookies) {
-        let cookieMarker = JSON.parse($.cookie(cookiesKey)); //Json으로 파싱
+        let cookieMarker = cookies[cookiesKey]; //Json으로 파싱
 
         let li = $("<li style='padding: 0.5rem 0rem 0rem 0.5rem; cursor: pointer;'>")
-        let img = $("<img style='width:3rem;'>").attr("src", cookieMarker.thumbnail);
+        let img = $("<img style='width:3rem;'>").attr("src", JSON.parse(cookieMarker[1]).thumbnail);
 
-        li.data(cookieMarker);
+        li.data(JSON.parse(cookieMarker[1]));
         li.append(img);
         targetId.append(li);
 
@@ -270,16 +389,26 @@ function setCurrentCafe(targetMarker){
     }
 }
 
+/**
+ * 쿠키 최근 본 카페 삽입
+ * @param targetMarker
+ */
 function setCookie(targetMarker){
     let cookies = $.cookie();
 
     if(!cookies && targetMarker){
         //쿠키를 Object 형태로 넣으려면 JSON String으로 넣었다가
-        //JSOn 형태로 parsing해서 쓰면 된다.
-        $.cookie(targetMarker.place_name,  JSON.stringify(targetMarker),  { expires:360, path: '/' });
+        //JSON 형태로 parsing해서 쓰면 된다.
+        $.cookie(targetMarker.place_name,  JSON.stringify(targetMarker),  { expires:7, path: '/' });
     }else if(cookies && targetMarker){
-        $.removeCookie(targetMarker.place_name,{ expires:360, path: '/' } )
-        $.cookie(targetMarker.place_name,JSON. stringify(targetMarker),{ expires:360, path: '/' } )
+        if(Object.keys(cookies).length == 5){
+            let placeName = Object.keys(cookies)[0]
+            $.removeCookie(placeName,{ expires:7, path: '/' } )
+            $.cookie(targetMarker.place_name, JSON.stringify(targetMarker),{ expires:7, path: '/' } )
+        }else{
+            $.removeCookie(targetMarker.place_name,{ expires:7, path: '/' } )
+            $.cookie(targetMarker.place_name, JSON.stringify(targetMarker),{ expires:7, path: '/' } )
+        }
     }
 }
 
@@ -288,10 +417,18 @@ function getCookie(){
     return $.cookie();
 }
 
+// 쿠키 삭제
+function removeCookie(targetMarker){
+    $.removeCookie(targetMarker.place_name,{ expires:7, path: '/' } )
+}
+
 //상세영역 셋팅
 function setDetailContent(targetMarker){
+
+    getFavarite(targetMarker);
+    
     $(".titleArea .thumnail").attr('src', targetMarker.thumbnail);
-    $(".placeName").text(targetMarker.place_name);
+    $(".placeNameArea .placeName").text(targetMarker.place_name);
     $(".roadAddressName").text(targetMarker.road_address_name);
     $(".phone").text(targetMarker.phone);
 
@@ -301,17 +438,64 @@ function setDetailContent(targetMarker){
     }
 }
 
-//최근 카페 검색 목록 
-//쿠키 사용
-function getCurrentList(){
+/**
+ * 찜 설정
+ * @param targetMarker
+ */
+function getFavarite(targetMarker){
 
-    let cookies = $.cookie();
-
-    if(!!cookies){//쿠키가 없으면
-        // 최근 본 카페 목록이 없습니다 문구 노출
-    }else{//쿠키가 있으면
-        //최근 본 카페 목록에 표출 
+    let favIconImg = $(".placeNameArea .favIcon");
+    let param = {
+        id : targetMarker.id
     }
+
+    $.post("/main/fav/selectFav", param, function(result){
+        if(result && result.fav){
+            let fav = result.fav;
+            targetMarker.favId = fav;
+
+            if(fav.length > 0){
+                favIconImg.addClass("on");
+                favIconImg.data(targetMarker);
+                favIconImg.attr("src", favImageSrc);
+            }else{
+                favIconImg.removeClass("on");
+                favIconImg.data(targetMarker);
+                favIconImg.attr("src", defaultFavImageSrc);
+            }
+        }else{
+            favIconImg.removeClass("on");
+            favIconImg.data(targetMarker);
+            favIconImg.attr("src", defaultFavImageSrc);
+        }
+    })
+}
+
+/**
+ * Cafe favarite
+ */
+function setFavarite(target){
+
+    let data = $(target).data();
+
+    let param = {
+        favId : $(target).data().favId,
+        id : $(target).data().id,
+        favarite : $(target).hasClass("on") ? "N" : "Y"
+    }
+
+    $.post("/main/fav/saveFav", param, function(result){
+        if(result.fav.length > 0){
+            data.favId = result.fav;
+            $(target).addClass("on");
+            $(target).data(data);
+            $(target).attr("src", favImageSrc);
+        }else{
+            $(target).removeClass("on");
+            $(target).data(data);
+            $(target).attr("src", defaultFavImageSrc);
+        }
+    })
 }
 
 //overlay 생성

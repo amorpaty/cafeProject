@@ -8,7 +8,6 @@ import com.cafe.cafeproject.common.repository.CafeKeywordInfoRepository;
 import com.cafe.cafeproject.common.repository.CafeMenuInfoRepository;
 import com.cafe.cafeproject.common.repository.DaumOpenApiRepository;
 import com.cafe.cafeproject.common.repository.KeywordRepository;
-import com.cafe.cafeproject.daumOpenApi.DaumOpenApiTest;
 import io.micrometer.common.util.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -22,7 +21,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -78,7 +76,7 @@ public class CafeCrallingTest {
         options.addArguments("--start-maximized");
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--remote-allow-origins=*");
-        options.addArguments("headless"); // 창띄우지 않고 작업
+        //options.addArguments("headless"); // 창띄우지 않고 작업
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
@@ -261,7 +259,7 @@ public class CafeCrallingTest {
 
                                 for(WebElement a  : aList){
                                     String tagName = a.getText().replaceAll("#", "");        // 키워드
-                                    String cafeId = cafeinfoDto.getId(); // 카페 ID
+                                    int cafeId = cafeinfoDto.getId(); // 카페 ID
 
                                     if(StringUtils.isNotEmpty(tagName)){
                                         //DB에 키워드 목록이 있는지 여부 확인

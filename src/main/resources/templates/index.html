@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
 <head>
     <meta charset="UTF-8">
     <title>유일무이</title>
@@ -17,6 +19,13 @@
     <script type="text/javascript" src="resources/js/login/login.js"></script>
 </head>
 <body>
+    <!-- 로딩 바 -->
+    <div id="loading_spinner">
+        <div class="cv_spinner">
+            <span class="spinner"></span>
+        </div>
+    </div>
+    <!-- 로딩 바 -->
     <diV th:if="${session.userInfo} != null " id="profilePopAngcle" style="display: none;"></diV>
     <div th:if="${session.userInfo} != null " id="profilePopArea" style="display: none;">
         <div id="profileDiv">
@@ -62,76 +71,6 @@
             height: 100rem;
         ">
             <div id="keywordDiv">
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
-                <ul>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                    <li><p></p></li>
-                </ul>
             </div>
         </div>
         <div class="searchInputArea" style="
@@ -181,34 +120,40 @@
                             <img class="thumnail" src="" />
                         </div>
                         <div class="title" style="display: inline;">
-                            <div class="placeName"></div>
+                            <div class="placeNameArea">
+                                <span class="placeName"></span>
+                                <img th:if="${session.userInfo} == null" class="favIcon" src="resources/images/fav/default_like_heart.png" onclick="$('.loginBtn').trigger('click')" >
+                                <img th:if="${session.userInfo} != null" class="favIcon" src="resources/images/fav/default_like_heart.png" onclick="setFavarite(this)">
+
+                            </div>
                             <div class="roadAddressName"></div>
                             <div class="phone"></div>
                             <div class="close" title="닫기"></div>
                         </div>
                     </div>
-                    <div style="display: flex; height: 3rem; margin-top: 1rem;">
-                        <div style="width:9.6rem; background-color: rgba(87, 56, 45, 1); text-align: center; line-height: 3;">
+                    <div class="tab-content" style="display: flex; height: 3rem; margin-top: 1rem;">
+                        <!-- Tab panes -->
+                        <div class="detailTab on" style="width:9.6rem; text-align: center; line-height: 3;"  tabindex="1">
                             <span class="" style="color: white;font-weight: 500;">메뉴</span>
                         </div>
-                        <div style="width: 9.6rem;
-                            background-color: rgba(87, 56, 45, 1);
+                        <div class="detailTab" style="width: 9.6rem;
                             border-color: white;
                             border-left: 1px solid goldenrod;
                             border-right: 1px solid goldenrod;
                             line-height: 3;
                             text-align: center;
-                        ">
+                        " tabindex="2">
                             <span class="" style="color: white;font-weight: 500;">방문로그</span>
                         </div>
-                        <div style="width:9.8rem; background-color: rgba(87, 56, 45, 1); text-align: center;line-height: 3;">
+                        <div class="detailTab" style="width:9.8rem; text-align: center;line-height: 3;" tabindex="3">
                             <span class="" style="color: white;font-weight: 500;">사진</span>
                         </div>
                     </div>
                 </div>
                 <div class="cafeInfoArea">
-                    <div>
-                    </div>
+                    <th:block th:replace="main/tabs/tabs1"></th:block>
+                    <th:block th:replace="main/tabs/tabs2"></th:block>
+                    <th:block th:replace="main/tabs/tabs3"></th:block>
                 </div>
             </div>
             <div id="shadow" class="Shadow">
@@ -220,8 +165,9 @@
         <!-- map 영역  Start -->
         <div id="map" style="width:100%; height: 90%;">
             <div id="navArea">
-                <div style="height: 21%;text-align: center;/* margin-top: 0rem; */padding-top: 0px;">
-                    <img src="resources/images/like_heart.png" style=" width: 3rem; height: 3rem;">
+                <div style="height: 21%;text-align: center;/* margin-top: 0rem; */padding-top: 0px;line-height: 4.5;">
+                    <img th:if="${session.userInfo} == null" class="favIcon" src="resources/images/fav/default_like_heart.png" onclick="$('.loginBtn').trigger('click')" style=" width: 2rem; height: 2rem; cursor: pointer;">
+                    <img th:if="${session.userInfo} != null" class="favIcon" src="resources/images/fav/default_like_heart.png" onclick="getFavariteList(this)" style=" width: 2rem; height: 2rem; cursor: pointer;">
                 </div>
                 <div style="text-align: center;height: 12%;border-top: 1px solid lightgray;border-bottom: 1px solid lightgray;">
                     <span style="font-size: 9px;">최근 본 카페 </span>

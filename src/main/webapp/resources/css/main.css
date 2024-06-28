@@ -208,12 +208,23 @@
     width: 7rem;
 }
 
-.detailCafeInfo .cafeTitleArea .title .placeName{
+.detailCafeInfo .cafeTitleArea .title .placeNameArea .favIcon{
+    width: 1rem;
+    cursor: pointer;
+}
+
+.detailCafeInfo .cafeTitleArea .title .placeNameArea .favIcon.on{
+    width: 1rem;
+    cursor: pointer;
+}
+
+.detailCafeInfo .cafeTitleArea .title .placeNameArea .placeName{
     display: inline;
     font-size: inherit;
     font-weight: 800;
     padding-left: 1rem;
 }
+
 .detailCafeInfo .cafeTitleArea .title .roadAddressName{padding-left: 1rem; margin-top: 1rem; font-size: smaller;}
 .detailCafeInfo .cafeTitleArea .title .phone{padding-left: 1rem;font-size: smaller;}
 
@@ -290,4 +301,33 @@
     width: 22px;
     height: 54px;
     background-position: 0 -192px;
+}
+
+/* 상세화면 tab */
+
+.detailTab{
+    background-color:rgba(87, 56, 45, 1);
+    cursor: pointer;
+}
+
+.detailTab.on{
+    background-color: darkgoldenrod !important;
+}
+
+.detailArea{
+    display: none;
+}
+
+.detailArea.active{
+    display: block;
+}
+
+.detailArea UL{
+    display: flex;
+    list-style-type: none;
+    padding-left: 2.6rem;
+}
+
+.detailArea UL > li:nth-child(2){
+    margin: 0px 10px 0px 10px;
 }

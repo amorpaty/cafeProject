@@ -13,7 +13,7 @@ import lombok.*;
 public class CafeinfoDto {
 
     @Id
-    private String id;
+    private int id;
 
     @Column
     private String place_url;

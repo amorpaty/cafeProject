@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.List;
-
 @Data
 @Entity
 @Table(name = "t_cafe_keyword_info")
@@ -14,7 +12,7 @@ import java.util.List;
 public class CafeKeywordInfoDto {
 
     @Id
-    private String id;
+    private int id;
 
     @Id
     private String keywordId;

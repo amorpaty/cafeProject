@@ -18,7 +18,7 @@ public class CafeMenuInfoDto {
     private Long menuId;
 
     @JoinColumn
-    private String id;
+    private int id;
 
     @Column
     private String tit;

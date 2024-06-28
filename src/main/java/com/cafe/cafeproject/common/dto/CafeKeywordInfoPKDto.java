@@ -7,6 +7,6 @@ import java.io.Serializable;
 @Data
 @ToString(callSuper = true)
 public class CafeKeywordInfoPKDto implements Serializable {
-    private String id;
+    private int id;
     private String keywordId;
 }

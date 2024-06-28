@@ -1,5 +1,9 @@
 package com.cafe.cafeproject.login.service;
 
+import com.cafe.cafeproject.common.config.QueryDSLConfig;
+import com.cafe.cafeproject.common.dto.UserInfoDto;
+import com.cafe.cafeproject.common.repository.UserInfoRepository;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -19,9 +23,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
+import static com.cafe.cafeproject.common.dto.QUserInfoDto.userInfoDto;
+
+;
 
 @Service
+@RequiredArgsConstructor
 public class LoginService {
 
     @Value("${kakao.apiKey}")
@@ -29,6 +38,10 @@ public class LoginService {
 
     @Value("${kakao.redirectUri}")
     private String redirectUri;
+
+    private final UserInfoRepository userInfoRepository;
+
+    private final QueryDSLConfig queryDSLConfig;
 
     public String getAccessToken(String code){
         String token = null;
@@ -117,5 +130,17 @@ public class LoginService {
         }
 
         return userInfo;
+    }
+
+    /**
+     * 회원 체크
+     * @param userInfo
+     * @return
+     */
+    public UserInfoDto checkUserInfo(Map<String, Object> userInfo){
+        return queryDSLConfig.jpaQueryFactory().query()
+                .select(userInfoDto)
+                .from(userInfoDto)
+                .where(userInfoDto.email.eq(userInfo.get("email").toString())).fetchOne();
     }
 }

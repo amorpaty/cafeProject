@@ -1,9 +1,12 @@
 package com.cafe.cafeproject.login.controller;
 
+import com.cafe.cafeproject.common.dto.UserInfoDto;
+import com.cafe.cafeproject.common.repository.UserInfoRepository;
 import com.cafe.cafeproject.common.storage.SesstionStorage;
 import com.cafe.cafeproject.login.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,8 @@ import java.util.HashMap;
 public class LoginController {
 
     private final LoginService loginService;
+
+    private final UserInfoRepository userInfoRepository;
 
     private final SesstionStorage sesstionStorage;
 
@@ -36,6 +41,15 @@ public class LoginController {
 
         // kakao 사용자 정보 조회 (닉네임, 썸네일, 이메일)
         HashMap<String, Object> userInfo = loginService.getUserInfo(accessToken);
+
+        // User DB check
+        UserInfoDto userInfoDto = loginService.checkUserInfo(userInfo);
+
+        if(ObjectUtils.isEmpty(userInfoDto)){
+            userInfoDto = new UserInfoDto();
+            userInfoDto.setEmail(userInfo.get("email").toString());
+            userInfoRepository.saveAndFlush(userInfoDto);
+        }
 
         //로그인 세션 설정
         sesstionStorage.getSesstion("KAKAO", accessToken, userInfo, request);
