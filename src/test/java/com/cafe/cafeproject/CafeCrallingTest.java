@@ -88,11 +88,18 @@ public class CafeCrallingTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(5000));
 
 
-        List<CafeinfoDto> cafeinfoDtoList = daumOpenApiRepository.findAll();
+        List<CafeinfoDto> cafeinfoDtoList = daumOpenApiRepository.findCafeInfoList();
 
         for(CafeinfoDto cafeinfoDto : cafeinfoDtoList) {
 
             WebElement inputSearch = driver.findElement(By.className("input_search"));
+
+            if(cafeinfoDto.getPlace_name().equalsIgnoreCase("제비꽃다방") ||
+                    cafeinfoDto.getPlace_name().equals("더리얼커피&쥬스 2호점") ||
+                    cafeinfoDto.getPlace_name().contains("이디야") || cafeinfoDto.getPlace_name().contains("스타벅스")
+            ){
+                continue;
+            }
 
             String inputKey = cafeinfoDto.getPlace_name(); //카페명
             inputSearch.clear();

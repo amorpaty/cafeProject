@@ -14,15 +14,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import static com.cafe.cafeproject.common.dto.QCafeinfoDto.cafeinfoDto;
-import static com.cafe.cafeproject.common.dto.QCafeKeywordInfoDto.cafeKeywordInfoDto;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
+
+import static com.cafe.cafeproject.common.dto.QCafeKeywordInfoDto.cafeKeywordInfoDto;
+import static com.cafe.cafeproject.common.dto.QCafeinfoDto.cafeinfoDto;
 
 /**
  * Main 화면 Service
@@ -117,7 +117,7 @@ public class MainService {
         return result;
     }
 
-    private String get(String apiUrl) {
+    public String get(String apiUrl) {
         HttpURLConnection con = this.connect(apiUrl);
 
         String var4;
@@ -140,7 +140,7 @@ public class MainService {
         return var4;
     }
 
-    private HttpURLConnection connect(String apiUrl) {
+    public HttpURLConnection connect(String apiUrl) {
         try {
             URL url = new URL(apiUrl);
             return (HttpURLConnection)url.openConnection();
@@ -151,7 +151,7 @@ public class MainService {
         }
     }
 
-    private String readBody(InputStream body) {
+    public String readBody(InputStream body) {
         InputStreamReader streamReader = new InputStreamReader(body);
 
         try {

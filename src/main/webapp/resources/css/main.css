@@ -308,6 +308,8 @@
 .detailTab{
     background-color:rgba(87, 56, 45, 1);
     cursor: pointer;
+    box-shadow: 0px 0px 2px 0px gray;
+    border-radius: 0.2rem 0.2rem 0rem 0rem;
 }
 
 .detailTab.on{
@@ -328,6 +330,54 @@
     padding-left: 2.6rem;
 }
 
-.detailArea UL > li:nth-child(2){
+.detailArea[tabindex='1'] UL{
+    display: grid;
+}
+
+.detailArea[tabindex='3'] UL > li:nth-child(2){
     margin: 0px 10px 0px 10px;
+}
+
+.detailArea UL > li >  a > img{
+  width: 8.4rem;
+}
+.detailArea[tabindex="1"],
+.detailArea[tabindex="3"]{
+    max-height: 62%;
+    position: fixed;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.detailArea[tabindex='1'] UL LI {
+    position: relative;
+    padding-top: 17px;
+    padding-bottom: 16px;
+    width: 26.8rem;
+    height: 5rem;
+    border-bottom: 1px solid lightgray;
+    align-content: center;
+}
+
+.detailArea[tabindex='1'] UL LI .menu,
+.detailArea[tabindex='1'] UL LI .detailPrice {
+    display: inline;
+}
+
+.detailArea[tabindex='1'] UL LI .menu SPAN { font-weight: 700;}
+
+.detailArea[tabindex='1'] UL LI .detailPrice {
+    margin-left: 1rem;
+    color: red;
+    font-weight: 700;
+}
+
+.detailArea[tabindex='1'] UL LI .detail {
+    margin-top: 1rem;
+    color: gray;
+}
+
+.detailArea[tabindex='1'] UL LI .noData {
+    text-align: center;
+    color: gray;
 }

@@ -94,6 +94,9 @@ $(window).ready(function(){
 
             $(this).addClass("on");
             $(".detailArea[tabindex=" + tabIndex +"]").addClass("active");
+
+            //탭 영역 화면 표출
+            setTabContent();
         }
     })
 
@@ -117,7 +120,6 @@ function getKeywordList(){
             let ul = $("<ul>")
 
             for (let i = 0; i < result.length; i++) {
-
                 if(i%5 == 0){
                     ul = $("<ul>")
                 }
@@ -218,16 +220,18 @@ function addMarkers(markerList){
                 closeOverlay();
             }
 
+            if(curCafeMaker){
+                curCafeMaker.setMap(null);
+            }
+
+            curCafeMaker = marker;
+
             $.post("/main/getCafeThumnail", param, function(result){
                 if(result){
                     let thumbnail =  result.thumbnail_url;
                     markerList[i].thumbnail = thumbnail;
 
                     targetOverlay = createOverlay(markerList[i]);
-                    let content = targetOverlay.getContent();
-                    content = content.split("replaceThumnail").join(thumbnail);
-
-                    targetOverlay.setContent(content);
                     targetOverlay.setMap(map);
 
                     let overlayPosition = new kakao.maps.LatLng(Number(markerList[i].y) + 0.001 , markerList[i].x);
@@ -298,10 +302,6 @@ function getFavariteList(target) {
                                 favResultMarkers[i].thumbnail = thumbnail;
 
                                 targetOverlay = createOverlay(favResultMarkers[i]);
-                                let content = targetOverlay.getContent();
-                                content = content.split("replaceThumnail").join(thumbnail);
-
-                                targetOverlay.setContent(content);
                                 targetOverlay.setMap(map);
 
                                 let overlayPosition = new kakao.maps.LatLng(Number(favResultMarkers[i].y) + 0.001 , favResultMarkers[i].x);
@@ -371,10 +371,6 @@ function setCurrentCafe(targetMarker){
             }
 
             targetOverlay = createOverlay(data);
-            let content = targetOverlay.getContent();
-            content = content.split("replaceThumnail").join(data.thumbnail);
-
-            targetOverlay.setContent(content);
             targetOverlay.setMap(map);
 
             let overlayPosition = new kakao.maps.LatLng(Number(data.y) + 0.001 , data.x);
@@ -431,10 +427,20 @@ function setDetailContent(targetMarker){
     $(".placeNameArea .placeName").text(targetMarker.place_name);
     $(".roadAddressName").text(targetMarker.road_address_name);
     $(".phone").text(targetMarker.phone);
+    $(".tab-content .detailTab").data(targetMarker);
 
     if(!$(".detailCafeInfo").is("on")){
+        //카페 상세 내역 Tab 처음 메뉴 Tab으로 설정
+        $(".detailTab").removeClass("on");
+        $(".detailArea").removeClass("active");
+
+        $(".detailTab").eq(0).addClass("on");
+        $(".detailArea[tabindex=1]").addClass("active");
+
         $(".detailCafeInfo").css("display", "block");
         $(".detailCafeInfo").addClass("on");
+
+        setTabContent();
     }
 }
 
@@ -529,7 +535,8 @@ function getContent(targetMarker){
     content += '            <div class="close" onclick="closeOverlay()" title="닫기"></div>';
     content += '         </div>';
     content += '         <div style="display:flex;">';
-    content += '            <img class="thumbnail" src="replaceThumnail">';
+    content += '            <img class="thumbnail" src="'+ targetMarker.thumbnail + '">';
+
     content += '            <div class="desc">';
     content += '              <span class="address">' + targetMarker.road_address_name + ' </span>';
     content += '            </div>';
@@ -538,6 +545,86 @@ function getContent(targetMarker){
     content += '</div>';
 
     return content;
+}
+
+function setTabContent(){
+    let data = $(".detailTab.on").data();
+    let tabindex = $(".detailArea.active").attr("tabindex");
+
+    switch (tabindex){
+        case "1" :
+            getTabCafeMenu(data);
+            break;
+        case "2" :
+            break;
+        case "3" :
+            getTabCafePicture(data);
+            break;
+    }
+}
+
+// 메뉴 탭
+function getTabCafeMenu(targetMarker){
+    let targetUL = $(".detailArea.active[tabindex='1'] UL");
+    targetUL.empty();
+
+    $.post("/main/tab/getTabCafeMenuList", targetMarker, function(result){
+        if(result.length > 0){
+            result.forEach(menu => {
+                let li = $("<li>")
+
+                menu.tit = menu.tit != null ? menu.tit : ""
+                menu.price = menu.price != null ? menu.price : ""
+                menu.ditail =  menu.ditail != null ? menu.ditail : ""
+
+                let menuDiv = $("<div class='menu'><span>" + menu.tit +"</span></div>")
+                let priveDiv = $("<div class='detailPrice'><span>" + menu.price +"</span></div>")
+                let detailDiv = $("<div class='detail'><span>" + menu.ditail +"</span></div>")
+
+                li.append(menuDiv);
+                li.append(priveDiv);
+                li.append(detailDiv);
+                targetUL.append(li);
+            })
+        }else{
+            let li = $("<li>")
+            let noDataDiv = $("<div class='noData'><span>등록된 정보가 없습니다.</span></div>")
+            li.append(noDataDiv);
+            targetUL.append(li);
+        }
+    });
+}
+
+// 사진 탭
+function getTabCafePicture(targetMarker){
+    $.post("/main/tab/getCafePictureList", targetMarker, function(result){
+        if(result.length > 0){
+
+            let target = $(".detailArea.active")
+            target.empty();
+            let ul = $("<ul>")
+
+            for (let i = 0; i < result.length; i++) {
+
+                if(i%3 == 0){
+                    ul = $("<ul>")
+                }
+
+                let li = $("<li>")
+                let a = $("<a>")
+                let img = $("<img>")
+                let cafePictureData = result[i];
+                li.data(cafePictureData);
+                a.attr("href",cafePictureData.doc_url);
+                img.attr("src",cafePictureData.thumbnail_url);
+
+                a.append(img);
+                li.append(a);
+                ul.append(li);
+                target.append(ul);
+            }
+        }
+    })
 }
 
 // 사용자의 현재 위치로 이동
